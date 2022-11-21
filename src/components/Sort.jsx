@@ -1,16 +1,28 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { setSortType } from '../redux/slices/filterSlice';
 
 function Sort() {
-  const [sortType, setSortType] = useState('популярности');
+  const dispatch = useDispatch()
+  const sort = useSelector(state => state.filter.sortType)
+  // const [sort, setSort] = useState({ id: 0, title: 'популярности', sortProperty: 'rating' })
+
+  const sortArr = [
+    { id: 0, title: 'популярности', sortProperty: 'rating' },
+    { id: 1, title: 'цене', sortProperty: 'price' },
+    { id: 2, title: 'алфавиту', sortProperty: 'title' },
+  ];
+
   const [isVisible, setVisiable] = useState(false);
-  const sortArr = ['популярности', 'цене', 'алфавиту'];
-  const selectSortType = (obj) => {
-    setSortType(obj);
-    setVisiable(false);
-  };
+
   const openClosePopup = () => {
     setVisiable(isVisible === true ? false : true);
   };
+
+  const onChangeSort = (id) => {
+    dispatch(setSortType(id))
+    openClosePopup()
+  }
 
   return (
     <div className="sort">
@@ -27,16 +39,16 @@ function Sort() {
           />
         </svg>
         <b>Сортировка по:</b>
-        <span onClick={() => openClosePopup()}>{sortType}</span>
+        <span onClick={() => openClosePopup()}>{sort.title}</span>
       </div>
       <div className={isVisible === false ? 'sort__popup active' : 'sort__popup'}>
         <ul>
           {sortArr.map((type, index) => (
             <li
-              onClick={() => selectSortType(type)}
-              className={type === sortType ? 'active' : ''}
+              onClick={() => onChangeSort(type)}
+              className={index === sort.id ? 'active' : ''}
               key={index}>
-              {type}
+              {type.title}
             </li>
           ))}
         </ul>

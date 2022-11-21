@@ -16,8 +16,6 @@ function PizzaBlock({ title, price, imageUrl, types, sizes, id }) {
   const clickButton = () => {
     setPizzasCount(pizzasCount + 1);
   };
- 
-  
 
   return (
     <div className="pizza-block">
